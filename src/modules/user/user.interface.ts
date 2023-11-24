@@ -1,17 +1,17 @@
 import { Schema, model, connect } from "mongoose";
 
-interface FullName {
+export interface FullName {
   firstName: string;
   lastName: string;
 }
-
-interface Address {
+ 
+export interface Address {
   street: string;
   city: string;
   country: string;
 }
 
-interface Orders {
+export interface Orders {
   productName: string;
   price: number;
   quantity: number;
