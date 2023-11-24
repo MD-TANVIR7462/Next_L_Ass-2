@@ -28,3 +28,7 @@ const UserSchema = new Schema<User>({
   address: { type: AddressShema, required: true },
   orders: { type: [OrderSchema], required: true },
 });
+
+
+//model 
+export const UserModel = model<User>("User",UserSchema)

@@ -8,25 +8,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const app_1 = __importDefault(require("./app"));
-const port = 5000;
-require("dotenv").config();
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield mongoose_1.default.connect(process.env.DB_URL);
-            app_1.default.listen(port, () => {
-                console.log(`Example app listening on port ${port}`);
-            });
-        }
-        catch (error) {
-            console.log("line-13", error);
-        }
-    });
-}
-main();
+exports.creatUser = void 0;
+const user_service_1 = require("./user.service");
+const creatUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const newUser = req.body;
+        console.log(newUser);
+        const result = yield (0, user_service_1.creatUserInDB)(newUser);
+        res.status(200).json({
+            success: true,
+            message: "User created successfully!",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            succcess: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: "User not found",
+            },
+        });
+    }
+});
+exports.creatUser = creatUser;
