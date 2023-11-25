@@ -31,7 +31,7 @@ const creatUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             error: {
                 code: 404,
                 description: "User not found",
-                err
+                err,
             },
         });
     }
@@ -53,7 +53,7 @@ const getAllusers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             error: {
                 code: 404,
                 description: "Users not found",
-                err
+                err,
             },
         });
     }
@@ -86,7 +86,7 @@ const getSigleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             error: {
                 code: 404,
                 description: "User not found",
-                err
+                err,
             },
         });
     }
@@ -119,7 +119,7 @@ const deleteSigleUser = (req, res) => __awaiter(void 0, void 0, void 0, function
             error: {
                 code: 404,
                 description: "Users not deleted",
-                err
+                err,
             },
         });
     }
@@ -153,7 +153,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             error: {
                 code: 404,
                 description: "User not updated",
-                err
+                err,
             },
         });
     }
@@ -164,6 +164,16 @@ const specificUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, funct
     try {
         const { userId } = req.params;
         const result = yield (0, user_service_1.specificUserOrdersDB)(userId);
+        if (!result) {
+            return res.status(404).json({
+                succcess: false,
+                message: "User not found",
+                error: {
+                    code: 404,
+                    description: "User not found",
+                },
+            });
+        }
         res.status(200).json({
             success: true,
             message: "Order fetched successfully!",
@@ -177,7 +187,7 @@ const specificUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, funct
             error: {
                 code: 404,
                 description: "orders not found",
-                err
+                err,
             },
         });
     }
@@ -201,7 +211,7 @@ const orderUserDataAdd = (req, res) => __awaiter(void 0, void 0, void 0, functio
             error: {
                 code: 404,
                 description: "Order does not added",
-                error
+                error,
             },
         });
     }
@@ -210,8 +220,7 @@ exports.orderUserDataAdd = orderUserDataAdd;
 const ordersSum = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        const result = yield (0, user_service_1.ordersPriceSumDB)(userId);
-        console.log(result);
+        const result = yield (0, user_service_1.totalOrderPriceIntoDB)(parseInt(userId));
         res.status(200).json({
             success: true,
             message: "Total price calculated successfully!",
@@ -225,7 +234,7 @@ const ordersSum = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             error: {
                 code: 404,
                 description: "price not calculated",
-                err
+                err,
             },
         });
     }

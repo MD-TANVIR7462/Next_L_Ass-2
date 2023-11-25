@@ -19,6 +19,7 @@ const OrderSchema = zod_1.z.object({
 exports.UserValidationSchema = zod_1.z.object({
     userId: zod_1.z.number(),
     username: zod_1.z.string().min(1),
+    password: zod_1.z.string().min(1),
     fullName: FullNameSchema,
     age: zod_1.z.number().min(1),
     email: zod_1.z.string().email(),

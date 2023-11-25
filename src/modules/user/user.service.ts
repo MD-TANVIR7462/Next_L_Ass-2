@@ -63,3 +63,31 @@ export const ordersPriceSumDB = async (id: string) => {
 
   return result;
 };
+export const totalOrderPriceIntoDB = async (userId: number) => {
+  const orderData = await UserModel.aggregate([
+    { $match: { userId } },
+    {
+      $unwind: '$orders',
+    },
+    {
+      $group: {
+        _id: null,
+        totalPrice: {
+          $sum: {
+            $multiply: ['$orders.price', '$orders.quantity'],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        totalPrice: 1,
+      },
+    },
+  ]);
+  if (orderData.length === 0) {
+    return null;
+  }
+  return orderData;
+};

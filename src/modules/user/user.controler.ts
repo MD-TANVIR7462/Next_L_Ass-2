@@ -5,8 +5,8 @@ import {
   deleteSigleUsersDB,
   getAllUsersDB,
   getSigleUsersDB,
-  ordersPriceSumDB,
   specificUserOrdersDB,
+  totalOrderPriceIntoDB,
   updateUsersDB,
 } from "./user.service";
 import { z } from "zod";
@@ -14,10 +14,10 @@ import { UserValidationSchema } from "./user.validation";
 
 export const creatUser = async (req: Request, res: Response) => {
   try {
-  //zod validation
+    //zod validation
 
-  const user = req.body;
-  const zodvalidateData =UserValidationSchema.parse(user)
+    const user = req.body;
+    const zodvalidateData = UserValidationSchema.parse(user);
     const result = await creatUserInDB(zodvalidateData);
     res.status(200).json({
       success: true,
@@ -31,7 +31,7 @@ export const creatUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "User not found",
-        err
+        err,
       },
     });
   }
@@ -51,7 +51,7 @@ export const getAllusers = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "Users not found",
-        err
+        err,
       },
     });
   }
@@ -61,16 +61,15 @@ export const getSigleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const result = await getSigleUsersDB(userId);
-    if(!result){
+    if (!result) {
       return res.status(404).json({
         succcess: false,
         message: "User not found",
         error: {
           code: 404,
           description: "User not found",
-       
         },
-      })
+      });
     }
     res.status(200).json({
       success: true,
@@ -84,7 +83,7 @@ export const getSigleUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "User not found",
-        err
+        err,
       },
     });
   }
@@ -92,18 +91,17 @@ export const getSigleUser = async (req: Request, res: Response) => {
 export const deleteSigleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    
+
     const result = await deleteSigleUsersDB(parseInt(userId));
-    if(!result){
+    if (!result) {
       return res.status(404).json({
         succcess: false,
         message: "User not found",
         error: {
           code: 404,
           description: "User not found",
-       
         },
-      })
+      });
     }
     res.status(200).json({
       success: true,
@@ -117,7 +115,7 @@ export const deleteSigleUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "Users not deleted",
-        err
+        err,
       },
     });
   }
@@ -128,16 +126,15 @@ export const updateUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const data = req.body;
     const result = await updateUsersDB(userId, data);
-    if(!result){
+    if (!result) {
       return res.status(404).json({
         succcess: false,
         message: "User not found",
         error: {
           code: 404,
           description: "User not found",
-       
         },
-      })
+      });
     }
     res.status(200).json({
       success: true,
@@ -151,7 +148,7 @@ export const updateUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "User not updated",
-        err
+        err,
       },
     });
   }
@@ -161,6 +158,16 @@ export const specificUserOrders = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const result = await specificUserOrdersDB(userId);
+    if (!result) {
+      return res.status(404).json({
+        succcess: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found",
+        },
+      });
+    }
     res.status(200).json({
       success: true,
       message: "Order fetched successfully!",
@@ -173,7 +180,7 @@ export const specificUserOrders = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "orders not found",
-        err
+        err,
       },
     });
   }
@@ -196,7 +203,7 @@ export const orderUserDataAdd = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "Order does not added",
-        error
+        error,
       },
     });
   }
@@ -205,8 +212,8 @@ export const orderUserDataAdd = async (req: Request, res: Response) => {
 export const ordersSum = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await ordersPriceSumDB(userId);
-    console.log(result);
+    const result = await totalOrderPriceIntoDB(parseInt(userId));
+
     res.status(200).json({
       success: true,
       message: "Total price calculated successfully!",
@@ -219,7 +226,7 @@ export const ordersSum = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "price not calculated",
-        err
+        err,
       },
     });
   }

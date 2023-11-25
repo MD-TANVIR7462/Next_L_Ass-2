@@ -18,7 +18,7 @@ export type Orders = {
 export type User = {
   userId: number;
   username: string;
-  //   password: string;
+    password: string;
   fullName: FullName;
   age: number;
   email: string;

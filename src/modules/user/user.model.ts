@@ -1,5 +1,7 @@
 import { Schema, model, connect } from "mongoose";
 import { Address, FullName, Orders, User } from "./user.interface";
+import bcrypt from "bcrypt";
+require("dotenv").config();
 
 const FullNameSchema = new Schema<FullName>({
   firstName: {
@@ -34,6 +36,11 @@ const UserSchema = new Schema<User>({
     unique: true,
   },
   username: { type: String, required: [true, "Username is required"] },
+  password: {
+    type: String,
+    required: [true, "password is required"],
+    select: false,
+  },
   fullName: { type: FullNameSchema, required: [true, "Full Name is required"] },
   age: { type: Number, required: [true, "Age is required"] },
   email: { type: String, required: [true, "Email is required"], unique: true },
@@ -41,6 +48,22 @@ const UserSchema = new Schema<User>({
   hobbies: { type: [String], required: [true, "Hobbies are required"] },
   address: { type: AddressSchema, required: [true, "Address is required"] },
   orders: { type: [OrderSchema], required: [true, "Orders are required"] },
+});
+
+//pre
+UserSchema.pre("save", async function (next) {
+  // console.log(this,"pre hook");
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(process.env.BCRYPT_SALT)
+  );
+  next();
+});
+
+//post hook
+UserSchema.post("save", function () {
+  console.log(this, "post hook");
 });
 
 // model
