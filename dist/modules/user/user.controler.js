@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.specificUserOrders = exports.updateUser = exports.deleteSigleUser = exports.getSigleUser = exports.getAllusers = exports.creatUser = void 0;
+exports.ordersSum = exports.orderUserDataAdd = exports.specificUserOrders = exports.updateUser = exports.deleteSigleUser = exports.getSigleUser = exports.getAllusers = exports.creatUser = void 0;
 const user_service_1 = require("./user.service");
 const creatUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -144,3 +144,49 @@ const specificUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.specificUserOrders = specificUserOrders;
+const orderUserDataAdd = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const data = req.body;
+        const result = yield (0, user_service_1.addOrderUserInDB)(userId, data);
+        res.status(200).json({
+            success: true,
+            message: "Order ADDED successfully!",
+            data: result,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Order does not added',
+            error: {
+                code: 404,
+                description: "Order does not added",
+            },
+        });
+    }
+});
+exports.orderUserDataAdd = orderUserDataAdd;
+const ordersSum = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const result = yield (0, user_service_1.ordersPriceSumDB)(userId);
+        console.log(result);
+        res.status(200).json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            succcess: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: "User not found",
+            },
+        });
+    }
+});
+exports.ordersSum = ordersSum;

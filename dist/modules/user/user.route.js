@@ -15,4 +15,6 @@ router.delete("/:userId", user_controler_1.deleteSigleUser);
 router.put("/:userId", user_controler_1.updateUser);
 //bonus 
 router.get("/:userId/orders", user_controler_1.specificUserOrders);
+router.get("/:userId/orders/total-price", user_controler_1.ordersSum);
+router.put("/:userId/orders", user_controler_1.orderUserDataAdd);
 exports.UserRoutes = router;

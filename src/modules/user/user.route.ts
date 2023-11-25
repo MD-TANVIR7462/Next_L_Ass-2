@@ -4,6 +4,8 @@ import {
   deleteSigleUser,
   getAllusers,
   getSigleUser,
+  orderUserDataAdd,
+  ordersSum,
   specificUserOrders,
   updateUser,
 } from "./user.controler";
@@ -18,5 +20,7 @@ router.put("/:userId", updateUser);
 
 //bonus 
 router.get("/:userId/orders",specificUserOrders)
+router.get("/:userId/orders/total-price",ordersSum)
+router.put("/:userId/orders",orderUserDataAdd)
 
 export const UserRoutes = router;

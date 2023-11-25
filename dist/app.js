@@ -13,7 +13,7 @@ app.use(express_1.default.text());
 app.use((0, cors_1.default)());
 //applications routes
 app.use("/api/users", user_route_1.UserRoutes);
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.get("/", (req, res) => {
+    res.send("Hello World!");
 });
 exports.default = app;

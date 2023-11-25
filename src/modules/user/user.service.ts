@@ -1,4 +1,4 @@
-import { User } from "./user.interface";
+import { Orders, User } from "./user.interface";
 import { UserModel } from "./user.model";
 
 //main marks
@@ -29,9 +29,41 @@ export const updateUsersDB = async (id: string, data: Partial<User>) => {
 };
 
 //bonus marks
-export const specificUserOrdersDB = async(id:string)=>{
+export const specificUserOrdersDB = async (id: string) => {
   const userOrders = await UserModel.findOne(
-    {userId:{$eq:id}},{_id:0,orders:1}
-  )
-return userOrders
-}
+    { userId: { $eq: id } },
+    { _id: 0, orders: 1 }
+  );
+  return userOrders;
+};
+
+
+export const addOrderUserInDB = async (id: string, data: Orders) => {
+  const result = await UserModel.updateOne(
+    { userId: id },
+    { $push: { orders: data } },
+  );
+  return result;
+};
+
+
+
+
+export const ordersPriceSumDB = async (id: string) => {
+  
+  const result = await UserModel.aggregate([
+    { $match: { userId: { $eq: id } } },
+    { $unwind: "$orders" },
+    {
+      $group: {
+        _id: "$orders",
+        totalPrice: {
+          $sum: { $multiply: ["$orders.price", "$orders.quantity"] },
+        },
+      },
+    },
+    { $project: { _id: 0, totalPrice: 1 } },
+  ]);
+ 
+  return result;
+};

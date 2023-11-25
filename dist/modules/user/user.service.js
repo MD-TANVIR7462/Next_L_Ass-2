@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.specificUserOrdersDB = exports.updateUsersDB = exports.deleteSigleUsersDB = exports.getSigleUsersDB = exports.getAllUsersDB = exports.creatUserInDB = void 0;
+exports.ordersPriceSumDB = exports.addOrderUserInDB = exports.specificUserOrdersDB = exports.updateUsersDB = exports.deleteSigleUsersDB = exports.getSigleUsersDB = exports.getAllUsersDB = exports.creatUserInDB = void 0;
 const user_model_1 = require("./user.model");
 //main marks
 const creatUserInDB = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -43,3 +43,25 @@ const specificUserOrdersDB = (id) => __awaiter(void 0, void 0, void 0, function*
     return userOrders;
 });
 exports.specificUserOrdersDB = specificUserOrdersDB;
+const addOrderUserInDB = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.updateOne({ userId: id }, { $push: { orders: data } });
+    return result;
+});
+exports.addOrderUserInDB = addOrderUserInDB;
+const ordersPriceSumDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.aggregate([
+        { $match: { userId: { $eq: id } } },
+        { $unwind: "$orders" },
+        {
+            $group: {
+                _id: "$orders",
+                totalPrice: {
+                    $sum: { $multiply: ["$orders.price", "$orders.quantity"] },
+                },
+            },
+        },
+        { $project: { _id: 0, totalPrice: 1 } },
+    ]);
+    return result;
+});
+exports.ordersPriceSumDB = ordersPriceSumDB;
