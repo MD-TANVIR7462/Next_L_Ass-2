@@ -11,10 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ordersSum = exports.orderUserDataAdd = exports.specificUserOrders = exports.updateUser = exports.deleteSigleUser = exports.getSigleUser = exports.getAllusers = exports.creatUser = void 0;
 const user_service_1 = require("./user.service");
+const user_validation_1 = require("./user.validation");
 const creatUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = req.body; //post man give data in a user object
-        const result = yield (0, user_service_1.creatUserInDB)(user);
+        //zod validation
+        const user = req.body;
+        const zodvalidateData = user_validation_1.UserValidationSchema.parse(user);
+        const result = yield (0, user_service_1.creatUserInDB)(zodvalidateData);
         res.status(200).json({
             success: true,
             message: "User created successfully!",
@@ -28,6 +31,7 @@ const creatUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             error: {
                 code: 404,
                 description: "User not found",
+                err
             },
         });
     }
@@ -49,6 +53,7 @@ const getAllusers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             error: {
                 code: 404,
                 description: "Users not found",
+                err
             },
         });
     }
@@ -58,6 +63,16 @@ const getSigleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const { userId } = req.params;
         const result = yield (0, user_service_1.getSigleUsersDB)(userId);
+        if (!result) {
+            return res.status(404).json({
+                succcess: false,
+                message: "User not found",
+                error: {
+                    code: 404,
+                    description: "User not found",
+                },
+            });
+        }
         res.status(200).json({
             success: true,
             message: "User fetched successfully!",
@@ -71,6 +86,7 @@ const getSigleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             error: {
                 code: 404,
                 description: "User not found",
+                err
             },
         });
     }
@@ -79,7 +95,17 @@ exports.getSigleUser = getSigleUser;
 const deleteSigleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        const result = yield (0, user_service_1.deleteSigleUsersDB)(userId);
+        const result = yield (0, user_service_1.deleteSigleUsersDB)(parseInt(userId));
+        if (!result) {
+            return res.status(404).json({
+                succcess: false,
+                message: "User not found",
+                error: {
+                    code: 404,
+                    description: "User not found",
+                },
+            });
+        }
         res.status(200).json({
             success: true,
             message: "User deleted successfully!",
@@ -93,6 +119,7 @@ const deleteSigleUser = (req, res) => __awaiter(void 0, void 0, void 0, function
             error: {
                 code: 404,
                 description: "Users not deleted",
+                err
             },
         });
     }
@@ -103,6 +130,16 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { userId } = req.params;
         const data = req.body;
         const result = yield (0, user_service_1.updateUsersDB)(userId, data);
+        if (!result) {
+            return res.status(404).json({
+                succcess: false,
+                message: "User not found",
+                error: {
+                    code: 404,
+                    description: "User not found",
+                },
+            });
+        }
         res.status(200).json({
             success: true,
             message: "User updated successfully!",
@@ -116,6 +153,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             error: {
                 code: 404,
                 description: "User not updated",
+                err
             },
         });
     }
@@ -135,10 +173,11 @@ const specificUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, funct
     catch (err) {
         res.status(500).json({
             succcess: false,
-            message: "User not found",
+            message: "orders not found",
             error: {
                 code: 404,
-                description: "User not found",
+                description: "orders not found",
+                err
             },
         });
     }
@@ -158,10 +197,11 @@ const orderUserDataAdd = (req, res) => __awaiter(void 0, void 0, void 0, functio
     catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Order does not added',
+            message: "Order does not added",
             error: {
                 code: 404,
                 description: "Order does not added",
+                error
             },
         });
     }
@@ -181,10 +221,11 @@ const ordersSum = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (err) {
         res.status(500).json({
             succcess: false,
-            message: "User not found",
+            message: "price not calculated ",
             error: {
                 code: 404,
-                description: "User not found",
+                description: "price not calculated",
+                err
             },
         });
     }

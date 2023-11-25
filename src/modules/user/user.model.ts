@@ -1,14 +1,18 @@
 import { Schema, model, connect } from "mongoose";
 import { Address, FullName, Orders, User } from "./user.interface";
 
-
 const FullNameSchema = new Schema<FullName>({
   firstName: {
     type: String,
+    trim: true,
     required: [true, "First Name is required"],
     maxlength: [25, "First Name must be less than 25 characters"],
   },
-  lastName: { type: String, required: [true, "Last Name is required"] },
+  lastName: {
+    type: String,
+    trim: true,
+    required: [true, "Last Name is required"],
+  },
 });
 
 const AddressSchema = new Schema<Address>({
@@ -17,13 +21,11 @@ const AddressSchema = new Schema<Address>({
   country: { type: String, required: [true, "Country is required"] },
 });
 
-
 const OrderSchema = new Schema<Orders>({
   productName: { type: String, required: [true, "Product Name is required"] },
   price: { type: Number, required: [true, "Price is required"] },
   quantity: { type: Number, required: [true, "Quantity is required"] },
 });
-
 
 const UserSchema = new Schema<User>({
   userId: {

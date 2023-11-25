@@ -28,7 +28,8 @@ const getSigleUsersDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getSigleUsersDB = getSigleUsersDB;
 const deleteSigleUsersDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.UserModel.findOne({ userId: { $eq: id } });
+    console.log(typeof (id));
+    const result = yield user_model_1.UserModel.deleteOne({ userId: { $eq: id } });
     return result;
 });
 exports.deleteSigleUsersDB = deleteSigleUsersDB;

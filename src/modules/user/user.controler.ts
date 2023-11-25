@@ -10,17 +10,15 @@ import {
   updateUsersDB,
 } from "./user.service";
 import { z } from "zod";
-
-
+import { UserValidationSchema } from "./user.validation";
 
 export const creatUser = async (req: Request, res: Response) => {
   try {
+  //zod validation
 
-    const UserValidationShema = z.object({
-      
-    })
-    const user = req.body; //post man give data in a user object
-    const result = await creatUserInDB(user);
+  const user = req.body;
+  const zodvalidateData =UserValidationSchema.parse(user)
+    const result = await creatUserInDB(zodvalidateData);
     res.status(200).json({
       success: true,
       message: "User created successfully!",
@@ -33,6 +31,7 @@ export const creatUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "User not found",
+        err
       },
     });
   }
@@ -52,6 +51,7 @@ export const getAllusers = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "Users not found",
+        err
       },
     });
   }
@@ -61,6 +61,17 @@ export const getSigleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const result = await getSigleUsersDB(userId);
+    if(!result){
+      return res.status(404).json({
+        succcess: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found",
+       
+        },
+      })
+    }
     res.status(200).json({
       success: true,
       message: "User fetched successfully!",
@@ -73,6 +84,7 @@ export const getSigleUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "User not found",
+        err
       },
     });
   }
@@ -80,7 +92,19 @@ export const getSigleUser = async (req: Request, res: Response) => {
 export const deleteSigleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await deleteSigleUsersDB(userId);
+    
+    const result = await deleteSigleUsersDB(parseInt(userId));
+    if(!result){
+      return res.status(404).json({
+        succcess: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found",
+       
+        },
+      })
+    }
     res.status(200).json({
       success: true,
       message: "User deleted successfully!",
@@ -93,6 +117,7 @@ export const deleteSigleUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "Users not deleted",
+        err
       },
     });
   }
@@ -103,6 +128,17 @@ export const updateUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const data = req.body;
     const result = await updateUsersDB(userId, data);
+    if(!result){
+      return res.status(404).json({
+        succcess: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found",
+       
+        },
+      })
+    }
     res.status(200).json({
       success: true,
       message: "User updated successfully!",
@@ -115,6 +151,7 @@ export const updateUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "User not updated",
+        err
       },
     });
   }
@@ -136,6 +173,7 @@ export const specificUserOrders = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "orders not found",
+        err
       },
     });
   }
@@ -143,26 +181,26 @@ export const specificUserOrders = async (req: Request, res: Response) => {
 
 export const orderUserDataAdd = async (req: Request, res: Response) => {
   try {
-  const {userId}=req.params
-  const data = req.body;
-  const result= await addOrderUserInDB(userId,data)
-  res.status(200).json({
-    success: true,
-    message: "Order ADDED successfully!",
-    data: result,
-  });
+    const { userId } = req.params;
+    const data = req.body;
+    const result = await addOrderUserInDB(userId, data);
+    res.status(200).json({
+      success: true,
+      message: "Order ADDED successfully!",
+      data: result,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Order does not added',
+      message: "Order does not added",
       error: {
         code: 404,
         description: "Order does not added",
+        error
       },
     });
   }
 };
-
 
 export const ordersSum = async (req: Request, res: Response) => {
   try {
@@ -181,6 +219,7 @@ export const ordersSum = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: "price not calculated",
+        err
       },
     });
   }

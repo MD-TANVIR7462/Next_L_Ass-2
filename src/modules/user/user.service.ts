@@ -16,8 +16,9 @@ export const getSigleUsersDB = async (id: string) => {
   const result = await UserModel.findOne({ userId: { $eq: id } });
   return result;
 };
-export const deleteSigleUsersDB = async (id: string) => {
-  const result = await UserModel.findOne({ userId: { $eq: id } });
+export const deleteSigleUsersDB = async (id: number) => {
+  console.log(typeof(id));
+  const result = await UserModel.deleteOne({ userId: { $eq: id } });
   return result;
 };
 export const updateUsersDB = async (id: string, data: Partial<User>) => {
@@ -37,20 +38,15 @@ export const specificUserOrdersDB = async (id: string) => {
   return userOrders;
 };
 
-
 export const addOrderUserInDB = async (id: string, data: Orders) => {
   const result = await UserModel.updateOne(
     { userId: id },
-    { $push: { orders: data } },
+    { $push: { orders: data } }
   );
   return result;
 };
 
-
-
-
 export const ordersPriceSumDB = async (id: string) => {
-  
   const result = await UserModel.aggregate([
     { $match: { userId: { $eq: id } } },
     { $unwind: "$orders" },
@@ -64,6 +60,6 @@ export const ordersPriceSumDB = async (id: string) => {
     },
     { $project: { _id: 0, totalPrice: 1 } },
   ]);
- 
+
   return result;
 };

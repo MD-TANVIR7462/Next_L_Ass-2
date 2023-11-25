@@ -1,20 +1,19 @@
-
 export type FullName = {
   firstName: string;
   lastName: string;
-}
- 
-export type Address  ={
+};
+
+export type Address = {
   street: string;
   city: string;
   country: string;
-}
+};
 
-export type Orders = { 
+export type Orders = {
   productName: string;
   price: number;
   quantity: number;
-}
+};
 
 export type User = {
   userId: number;
