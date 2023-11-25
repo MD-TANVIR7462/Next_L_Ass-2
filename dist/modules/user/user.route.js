@@ -7,5 +7,7 @@ exports.UserRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const user_controler_1 = require("./user.controler");
 const router = express_1.default.Router();
+//routes
+router.get('/', user_controler_1.getAllusers);
 router.post("/", user_controler_1.creatUser);
 exports.UserRoutes = router;

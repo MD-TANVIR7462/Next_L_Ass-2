@@ -9,10 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.creatUserInDB = void 0;
+exports.getAllUsersDB = exports.creatUserInDB = void 0;
 const user_model_1 = require("./user.model");
 const creatUserInDB = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.create(user);
     return result;
 });
 exports.creatUserInDB = creatUserInDB;
+const getAllUsersDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.find();
+    return result;
+});
+exports.getAllUsersDB = getAllUsersDB;

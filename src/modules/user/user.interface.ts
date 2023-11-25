@@ -1,17 +1,17 @@
 import { Schema, model, connect } from "mongoose";
 
-export interface FullName {
+export type FullName = {
   firstName: string;
   lastName: string;
 }
  
-export interface Address {
+export type Address  ={
   street: string;
   city: string;
   country: string;
 }
 
-export interface Orders {
+export type Orders = { 
   productName: string;
   price: number;
   quantity: number;
