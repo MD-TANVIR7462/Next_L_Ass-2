@@ -9,5 +9,6 @@ const user_controler_1 = require("./user.controler");
 const router = express_1.default.Router();
 //routes
 router.get('/', user_controler_1.getAllusers);
+router.get("/:userId", user_controler_1.getSigleUser);
 router.post("/", user_controler_1.creatUser);
 exports.UserRoutes = router;

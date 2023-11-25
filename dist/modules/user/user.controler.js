@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllusers = exports.creatUser = void 0;
+exports.getSigleUser = exports.getAllusers = exports.creatUser = void 0;
 const user_service_1 = require("./user.service");
 const creatUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -54,3 +54,25 @@ const getAllusers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getAllusers = getAllusers;
+const getSigleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const result = yield (0, user_service_1.getSigleUsersDB)(userId);
+        res.status(200).json({
+            success: true,
+            message: "User's are retrived successfully!",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            succcess: false,
+            message: "Single User not found",
+            error: {
+                code: 404,
+                description: "Sigle Users not found",
+            },
+        });
+    }
+});
+exports.getSigleUser = getSigleUser;
