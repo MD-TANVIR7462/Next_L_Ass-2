@@ -8,7 +8,11 @@ const express_1 = __importDefault(require("express"));
 const user_controler_1 = require("./user.controler");
 const router = express_1.default.Router();
 //routes
-router.get('/', user_controler_1.getAllusers);
+router.get("/", user_controler_1.getAllusers);
 router.get("/:userId", user_controler_1.getSigleUser);
 router.post("/", user_controler_1.creatUser);
+router.delete("/:userId", user_controler_1.deleteSigleUser);
+router.put("/:userId", user_controler_1.updateUser);
+//bonus 
+router.get("/:userId/orders", user_controler_1.specificUserOrders);
 exports.UserRoutes = router;

@@ -1,17 +1,37 @@
 import { User } from "./user.interface";
 import { UserModel } from "./user.model";
 
+//main marks
 export const creatUserInDB = async (user: User) => {
   const result = await UserModel.create(user);
   return result;
 };
 
-export const getAllUsersDB = async ()=>{
-  const result = await UserModel.find()
+export const getAllUsersDB = async () => {
+  const result = await UserModel.find();
   return result;
-}
+};
 
-export const getSigleUsersDB = async (id:string)=>{
-  const result = await UserModel.findOne({userId:{$eq:id}})
-  return result
+export const getSigleUsersDB = async (id: string) => {
+  const result = await UserModel.findOne({ userId: { $eq: id } });
+  return result;
+};
+export const deleteSigleUsersDB = async (id: string) => {
+  const result = await UserModel.findOne({ userId: { $eq: id } });
+  return result;
+};
+export const updateUsersDB = async (id: string, data: Partial<User>) => {
+  const result = await UserModel.updateOne(
+    { userId: { $eq: id } },
+    { $set: data }
+  );
+  return result;
+};
+
+//bonus marks
+export const specificUserOrdersDB = async(id:string)=>{
+  const userOrders = await UserModel.findOne(
+    {userId:{$eq:id}},{_id:0,orders:1}
+  )
+return userOrders
 }

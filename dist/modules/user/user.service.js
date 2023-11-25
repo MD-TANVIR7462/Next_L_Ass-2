@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSigleUsersDB = exports.getAllUsersDB = exports.creatUserInDB = void 0;
+exports.specificUserOrdersDB = exports.updateUsersDB = exports.deleteSigleUsersDB = exports.getSigleUsersDB = exports.getAllUsersDB = exports.creatUserInDB = void 0;
 const user_model_1 = require("./user.model");
+//main marks
 const creatUserInDB = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.UserModel.create(user);
     return result;
@@ -26,3 +27,19 @@ const getSigleUsersDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 exports.getSigleUsersDB = getSigleUsersDB;
+const deleteSigleUsersDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.findOne({ userId: { $eq: id } });
+    return result;
+});
+exports.deleteSigleUsersDB = deleteSigleUsersDB;
+const updateUsersDB = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.UserModel.updateOne({ userId: { $eq: id } }, { $set: data });
+    return result;
+});
+exports.updateUsersDB = updateUsersDB;
+//bonus marks
+const specificUserOrdersDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const userOrders = yield user_model_1.UserModel.findOne({ userId: { $eq: id } }, { _id: 0, orders: 1 });
+    return userOrders;
+});
+exports.specificUserOrdersDB = specificUserOrdersDB;
